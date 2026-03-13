@@ -1,0 +1,19 @@
+{
+  "name": "vps-control-telegram",
+  "version": "1.0.0",
+  "description": "Bot Telegram untuk mengontrol dan memonitor VPS",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": ["telegram", "bot", "vps", "monitoring", "devops"],
+  "author": "",
+  "license": "MIT"
+}
