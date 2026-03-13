@@ -83,57 +83,57 @@ Halo, *${name}*! Selamat datang di VPS Control Bot.
 📋 *Daftar Command:*
 
 📊 *Monitoring:*
-/cpu - Cek penggunaan CPU
-/ram - Cek penggunaan RAM
-/disk - Cek storage disk
-/uptime - Cek uptime server
-/status - Cek semua sekaligus
-/server\_report - Laporan lengkap server
-/server\_map - Arsitektur server
-/cpu\_graph - Grafik CPU 10 menit
+/cpu \- Cek penggunaan CPU
+/ram \- Cek penggunaan RAM
+/disk \- Cek storage disk
+/uptime \- Cek uptime server
+/status \- Cek semua sekaligus
+/server\_report \- Laporan lengkap server
+/server\_map \- Arsitektur server
+/cpu\_graph \- Grafik CPU 10 menit
 
 🔧 *Service Control:*
-/restart\_nginx - Restart Nginx
-/restart\_mysql - Restart MySQL
-/restart\_pm2 - Restart PM2
+/restart\_nginx \- Restart Nginx
+/restart\_mysql \- Restart MySQL
+/restart\_pm2 \- Restart PM2
 
 🛠 *Maintenance:*
-/update\_server - Update packages server
+/update\_server \- Update packages server
 
 🐳 *Docker:*
-/docker\_ps - List containers
-/docker\_restart <name> - Restart container
-/docker\_logs <name> - Lihat log container
+/docker\_ps \- List containers
+/docker\_restart \(name\) \- Restart container
+/docker\_logs \(name\) \- Lihat log container
 
 🚀 *Automation:*
-/deploy - Deploy aplikasi
+/deploy \- Deploy aplikasi
 
 📋 *Logs:*
-/log\_nginx - Log error Nginx
-/log\_pm2 - Log PM2
-/log\_access - Log access Nginx
+/log\_nginx \- Log error Nginx
+/log\_pm2 \- Log PM2
+/log\_access \- Log access Nginx
 
 🌐 *Website Monitor:*
-/web\_add <domain> - Tambah website monitor
-/web\_remove <domain> - Hapus website monitor
-/web\_list - Daftar website monitor
-/web\_check - Cek semua website sekarang
-/web\_start - Aktifkan auto website monitor
-/web\_stop - Nonaktifkan website monitor
-/check\_web <domain> - Cek satu website
+/web\_add \(domain\) \- Tambah website monitor
+/web\_remove \(domain\) \- Hapus website monitor
+/web\_list \- Daftar website monitor
+/web\_check \- Cek semua website sekarang
+/web\_start \- Aktifkan auto website monitor
+/web\_stop \- Nonaktifkan website monitor
+/check\_web \(domain\) \- Cek satu website
 
 🛡 *Security:*
-/ssh\_monitor\_start - Aktifkan SSH attack detector
-/ssh\_monitor\_stop - Nonaktifkan SSH detector
-/ssh\_check - Cek SSH attack sekarang
+/ssh\_monitor\_start \- Aktifkan SSH attack detector
+/ssh\_monitor\_stop \- Nonaktifkan SSH detector
+/ssh\_check \- Cek SSH attack sekarang
 
 🔔 *Alert:*
-/monitor\_start - Aktifkan auto alert resource
-/monitor\_stop - Nonaktifkan auto alert
-/monitor\_status - Status monitoring
-/check\_now - Cek alert manual
+/monitor\_start \- Aktifkan auto alert resource
+/monitor\_stop \- Nonaktifkan auto alert
+/monitor\_status \- Status monitoring
+/check\_now \- Cek alert manual
 
-ℹ️ Bot berjalan dan siap menerima perintah!
+ℹ️ Bot berjalan dan siap menerima perintah\!
   `.trim();
 
   await bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
@@ -166,8 +166,8 @@ bot.onText(/\/list/, withAuth(async (msg, match, chatId) => {
 
 🐳 *Docker*
 /docker\_ps — List containers
-/docker\_restart \<name\> — Restart container
-/docker\_logs \<name\> — Log container
+/docker\_restart (name) — Restart container
+/docker\_logs (name) — Log container
 
 🚀 *Automation*
 /deploy — Deploy aplikasi
@@ -178,9 +178,9 @@ bot.onText(/\/list/, withAuth(async (msg, match, chatId) => {
 /log\_access — Access log Nginx
 
 🌐 *Website Monitor*
-/check\_web \<domain\> — Cek satu website
-/web\_add \<domain\> — Tambah ke watchlist
-/web\_remove \<domain\> — Hapus dari watchlist
+/check\_web (domain) — Cek satu website
+/web\_add (domain) — Tambah ke watchlist
+/web\_remove (domain) — Hapus dari watchlist
 /web\_list — Daftar website dimonitor
 /web\_check — Cek semua website sekarang
 /web\_start — Aktifkan auto monitor
