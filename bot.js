@@ -9,7 +9,7 @@ const { diskCommand } = require("./commands/disk");
 const { uptimeCommand } = require("./commands/uptime");
 const { restartService } = require("./commands/restart");
 const { dockerPs, dockerRestart, dockerLogs } = require("./commands/docker");
-const { deployCommand, runDeploy } = require("./commands/deploy");
+const { deployCommand, deployAskMode, runDeploy } = require("./commands/deploy");
 const { logNginx, logPm2, logAccess } = require("./commands/logs");
 const { startMonitoring, stopMonitoring, isMonitoringActive } = require("./services/monitor");
 
@@ -272,6 +272,7 @@ bot.onText(/\/check_now/, withAuth(async (msg, match, chatId) => {
 bot.on("callback_query", async (query) => {
   const chatId = query.message.chat.id;
   const userId = query.from.id;
+  const messageId = query.message.message_id;
   const data = query.data;
 
   // Selalu answer callback agar loading spinner hilang
@@ -282,30 +283,40 @@ bot.on("callback_query", async (query) => {
     return bot.sendMessage(chatId, "🚫 Access Denied.");
   }
 
-  // Handle deploy callback: format "deploy:/path/to/project"
-  if (data.startsWith("deploy:")) {
-    const projectPath = data.replace("deploy:", "");
+  // Step 1: User pilih project → tampilkan pilihan mode
+  if (data.startsWith("deploy_pick:")) {
+    const projectPath = data.replace("deploy_pick:", "");
 
     if (projectPath === "cancel") {
-      // Edit pesan lama jadi notif batal
-      await bot.editMessageText("❌ Deploy dibatalkan.", {
-        chat_id: chatId,
-        message_id: query.message.message_id,
-      });
+      await bot.editMessageText("❌ Deploy dibatalkan.", { chat_id: chatId, message_id: messageId });
       return;
     }
 
-    // Edit pesan keyboard jadi konfirmasi
+    await deployAskMode(bot, chatId, messageId, projectPath);
+  }
+
+  // Step 2: User pilih mode → jalankan deploy
+  // format: deploy_run:<mode>:<projectPath>
+  else if (data.startsWith("deploy_run:")) {
+    const parts = data.replace("deploy_run:", "").split(":");
+    const mode = parts[0]; // simple | npm | composer
+    const projectPath = parts.slice(1).join(":"); // path bisa ada ':' di dalamnya
+
     await bot.editMessageText(
-      `🚀 Memulai deploy *${projectPath.split("/").pop()}*...`,
-      {
-        chat_id: chatId,
-        message_id: query.message.message_id,
-        parse_mode: "Markdown",
-      }
+      `🚀 Deploy *${projectPath.split("/").pop()}* dimulai...`,
+      { chat_id: chatId, message_id: messageId, parse_mode: "Markdown" }
     );
 
-    await runDeploy(bot, chatId, projectPath);
+    await runDeploy(bot, chatId, projectPath, mode);
+  }
+
+  // Tombol kembali → tampilkan ulang daftar project
+  else if (data === "deploy_back") {
+    await bot.editMessageText("↩️ Kembali ke pilihan project...", {
+      chat_id: chatId,
+      message_id: messageId,
+    });
+    await deployCommand(bot, chatId);
   }
 });
 
