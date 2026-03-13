@@ -75,134 +75,132 @@ function withAuth(handler) {
 // ─────────────────────────────────────────────────
 bot.onText(/\/start/, withAuth(async (msg, match, chatId) => {
   const name = msg.from.first_name || "User";
-  const message = `
-🚀 *VPS Control Bot Active!*
+  const message = [
+    `🚀 VPS Control Bot Active!`,
+    ``,
+    `Halo, ${name}! Selamat datang di VPS Control Bot.`,
+    ``,
+    `📊 MONITORING`,
+    `/cpu - Cek penggunaan CPU`,
+    `/ram - Cek penggunaan RAM`,
+    `/disk - Cek storage disk`,
+    `/uptime - Cek uptime server`,
+    `/status - Cek semua sekaligus`,
+    `/server_report - Laporan lengkap server`,
+    `/server_map - Arsitektur server`,
+    `/cpu_graph - Grafik CPU 10 menit`,
+    ``,
+    `🔧 SERVICE CONTROL`,
+    `/restart_nginx - Restart Nginx`,
+    `/restart_mysql - Restart MySQL`,
+    `/restart_pm2 - Restart PM2`,
+    ``,
+    `🛠 MAINTENANCE`,
+    `/update_server - Update packages server`,
+    ``,
+    `🐳 DOCKER`,
+    `/docker_ps - List containers`,
+    `/docker_restart nama - Restart container`,
+    `/docker_logs nama - Lihat log container`,
+    ``,
+    `🚀 DEPLOY`,
+    `/deploy - Deploy aplikasi`,
+    ``,
+    `📋 LOGS`,
+    `/log_nginx - Log error Nginx`,
+    `/log_pm2 - Log PM2`,
+    `/log_access - Log access Nginx`,
+    ``,
+    `🌐 WEBSITE MONITOR`,
+    `/check_web domain - Cek satu website`,
+    `/web_add domain - Tambah ke watchlist`,
+    `/web_remove domain - Hapus dari watchlist`,
+    `/web_list - Daftar website dimonitor`,
+    `/web_check - Cek semua sekarang`,
+    `/web_start - Aktifkan auto monitor`,
+    `/web_stop - Nonaktifkan auto monitor`,
+    ``,
+    `🛡 SECURITY`,
+    `/ssh_monitor_start - Aktifkan SSH attack detector`,
+    `/ssh_monitor_stop - Nonaktifkan SSH detector`,
+    `/ssh_check - Cek SSH attack sekarang`,
+    ``,
+    `🔔 ALERT`,
+    `/monitor_start - Aktifkan auto alert`,
+    `/monitor_stop - Nonaktifkan auto alert`,
+    `/monitor_status - Status monitoring`,
+    `/check_now - Cek alert manual`,
+    ``,
+    `ℹ️ Ketik /list untuk daftar lengkap.`,
+  ].join("\n");
 
-Halo, *${name}*! Selamat datang di VPS Control Bot.
-
-📋 *Daftar Command:*
-
-📊 *Monitoring:*
-/cpu \- Cek penggunaan CPU
-/ram \- Cek penggunaan RAM
-/disk \- Cek storage disk
-/uptime \- Cek uptime server
-/status \- Cek semua sekaligus
-/server\_report \- Laporan lengkap server
-/server\_map \- Arsitektur server
-/cpu\_graph \- Grafik CPU 10 menit
-
-🔧 *Service Control:*
-/restart\_nginx \- Restart Nginx
-/restart\_mysql \- Restart MySQL
-/restart\_pm2 \- Restart PM2
-
-🛠 *Maintenance:*
-/update\_server \- Update packages server
-
-🐳 *Docker:*
-/docker\_ps \- List containers
-/docker\_restart \(name\) \- Restart container
-/docker\_logs \(name\) \- Lihat log container
-
-🚀 *Automation:*
-/deploy \- Deploy aplikasi
-
-📋 *Logs:*
-/log\_nginx \- Log error Nginx
-/log\_pm2 \- Log PM2
-/log\_access \- Log access Nginx
-
-🌐 *Website Monitor:*
-/web\_add \(domain\) \- Tambah website monitor
-/web\_remove \(domain\) \- Hapus website monitor
-/web\_list \- Daftar website monitor
-/web\_check \- Cek semua website sekarang
-/web\_start \- Aktifkan auto website monitor
-/web\_stop \- Nonaktifkan website monitor
-/check\_web \(domain\) \- Cek satu website
-
-🛡 *Security:*
-/ssh\_monitor\_start \- Aktifkan SSH attack detector
-/ssh\_monitor\_stop \- Nonaktifkan SSH detector
-/ssh\_check \- Cek SSH attack sekarang
-
-🔔 *Alert:*
-/monitor\_start \- Aktifkan auto alert resource
-/monitor\_stop \- Nonaktifkan auto alert
-/monitor\_status \- Status monitoring
-/check\_now \- Cek alert manual
-
-ℹ️ Bot berjalan dan siap menerima perintah\!
-  `.trim();
-
-  await bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
+  await bot.sendMessage(chatId, message);
 }));
 
 // ─────────────────────────────────────────────────
 // COMMAND: /list - Daftar semua command
 // ─────────────────────────────────────────────────
 bot.onText(/\/list/, withAuth(async (msg, match, chatId) => {
-  const message = `
-📋 *DAFTAR COMMAND VPS BOT*
+  const message = [
+    `📋 DAFTAR COMMAND VPS BOT`,
+    ``,
+    `📊 MONITORING`,
+    `/cpu - Penggunaan CPU`,
+    `/ram - Penggunaan RAM`,
+    `/disk - Storage disk`,
+    `/uptime - Uptime server`,
+    `/status - Semua status sekaligus`,
+    `/server_report - Laporan lengkap server`,
+    `/server_map - Arsitektur server`,
+    `/cpu_graph - Grafik CPU 10 menit`,
+    ``,
+    `🔧 SERVICE CONTROL`,
+    `/restart_nginx - Restart Nginx`,
+    `/restart_mysql - Restart MySQL`,
+    `/restart_pm2 - Restart PM2`,
+    ``,
+    `🛠 MAINTENANCE`,
+    `/update_server - Update packages server`,
+    ``,
+    `🐳 DOCKER`,
+    `/docker_ps - List containers`,
+    `/docker_restart nama - Restart container`,
+    `/docker_logs nama - Log container`,
+    ``,
+    `🚀 AUTOMATION`,
+    `/deploy - Deploy aplikasi`,
+    ``,
+    `📄 LOGS`,
+    `/log_nginx - Error log Nginx`,
+    `/log_pm2 - Log PM2`,
+    `/log_access - Access log Nginx`,
+    ``,
+    `🌐 WEBSITE MONITOR`,
+    `/check_web domain - Cek satu website`,
+    `/web_add domain - Tambah ke watchlist`,
+    `/web_remove domain - Hapus dari watchlist`,
+    `/web_list - Daftar website dimonitor`,
+    `/web_check - Cek semua website sekarang`,
+    `/web_start - Aktifkan auto monitor`,
+    `/web_stop - Nonaktifkan auto monitor`,
+    ``,
+    `🛡 SECURITY`,
+    `/ssh_monitor_start - Aktifkan SSH attack detector`,
+    `/ssh_monitor_stop - Nonaktifkan SSH detector`,
+    `/ssh_check - Cek SSH attack sekarang`,
+    ``,
+    `🔔 MONITORING ALERT`,
+    `/monitor_start - Aktifkan auto alert`,
+    `/monitor_stop - Nonaktifkan auto alert`,
+    `/monitor_status - Status monitoring`,
+    `/check_now - Cek alert sekarang`,
+    ``,
+    `ℹ️ INFO`,
+    `/list - Tampilkan daftar ini`,
+    `/start - Pesan sambutan`,
+  ].join("\n");
 
-📊 *Monitoring*
-/cpu — Penggunaan CPU
-/ram — Penggunaan RAM
-/disk — Storage disk
-/uptime — Uptime server
-/status — Semua status sekaligus
-/server\_report — Laporan lengkap server
-/server\_map — Arsitektur server
-/cpu\_graph — Grafik CPU 10 menit
-
-🔧 *Service Control*
-/restart\_nginx — Restart Nginx
-/restart\_mysql — Restart MySQL
-/restart\_pm2 — Restart PM2
-
-🛠 *Maintenance*
-/update\_server — Update packages server
-
-🐳 *Docker*
-/docker\_ps — List containers
-/docker\_restart (name) — Restart container
-/docker\_logs (name) — Log container
-
-🚀 *Automation*
-/deploy — Deploy aplikasi
-
-📄 *Logs*
-/log\_nginx — Error log Nginx
-/log\_pm2 — Log PM2
-/log\_access — Access log Nginx
-
-🌐 *Website Monitor*
-/check\_web (domain) — Cek satu website
-/web\_add (domain) — Tambah ke watchlist
-/web\_remove (domain) — Hapus dari watchlist
-/web\_list — Daftar website dimonitor
-/web\_check — Cek semua website sekarang
-/web\_start — Aktifkan auto monitor
-/web\_stop — Nonaktifkan auto monitor
-
-🛡 *Security*
-/ssh\_monitor\_start — Aktifkan SSH attack detector
-/ssh\_monitor\_stop — Nonaktifkan SSH detector
-/ssh\_check — Cek SSH attack sekarang
-
-🔔 *Monitoring Alert*
-/monitor\_start — Aktifkan auto alert resource
-/monitor\_stop — Nonaktifkan auto alert
-/monitor\_status — Status monitoring
-/check\_now — Cek alert sekarang
-
-ℹ️ *Info*
-/list — Tampilkan daftar ini
-/start — Pesan sambutan
-  `.trim();
-
-  await bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
+  await bot.sendMessage(chatId, message);
 }));
 
 // ─────────────────────────────────────────────────
