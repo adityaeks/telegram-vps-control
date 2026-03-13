@@ -9,7 +9,7 @@ const { diskCommand } = require("./commands/disk");
 const { uptimeCommand } = require("./commands/uptime");
 const { restartService } = require("./commands/restart");
 const { dockerPs, dockerRestart, dockerLogs } = require("./commands/docker");
-const { deployCommand } = require("./commands/deploy");
+const { deployCommand, runDeploy } = require("./commands/deploy");
 const { logNginx, logPm2, logAccess } = require("./commands/logs");
 const { startMonitoring, stopMonitoring, isMonitoringActive } = require("./services/monitor");
 
@@ -265,6 +265,49 @@ bot.onText(/\/check_now/, withAuth(async (msg, match, chatId) => {
   await checkAndAlert(bot, chatId);
   await bot.sendMessage(chatId, "✅ Pengecekan selesai. Tidak ada alert jika semua metric normal.");
 }));
+
+// ─────────────────────────────────────────────────
+// CALLBACK QUERY HANDLER (Inline Keyboard)
+// ─────────────────────────────────────────────────
+bot.on("callback_query", async (query) => {
+  const chatId = query.message.chat.id;
+  const userId = query.from.id;
+  const data = query.data;
+
+  // Selalu answer callback agar loading spinner hilang
+  await bot.answerCallbackQuery(query.id);
+
+  // Auth check
+  if (!isAllowed(userId)) {
+    return bot.sendMessage(chatId, "🚫 Access Denied.");
+  }
+
+  // Handle deploy callback: format "deploy:/path/to/project"
+  if (data.startsWith("deploy:")) {
+    const projectPath = data.replace("deploy:", "");
+
+    if (projectPath === "cancel") {
+      // Edit pesan lama jadi notif batal
+      await bot.editMessageText("❌ Deploy dibatalkan.", {
+        chat_id: chatId,
+        message_id: query.message.message_id,
+      });
+      return;
+    }
+
+    // Edit pesan keyboard jadi konfirmasi
+    await bot.editMessageText(
+      `🚀 Memulai deploy *${projectPath.split("/").pop()}*...`,
+      {
+        chat_id: chatId,
+        message_id: query.message.message_id,
+        parse_mode: "Markdown",
+      }
+    );
+
+    await runDeploy(bot, chatId, projectPath);
+  }
+});
 
 // ─────────────────────────────────────────────────
 // ERROR HANDLER
