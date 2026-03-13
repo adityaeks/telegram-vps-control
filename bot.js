@@ -93,6 +93,52 @@ Halo, *${name}*! Selamat datang di VPS Control Bot.
 }));
 
 // ─────────────────────────────────────────────────
+// COMMAND: /list - Daftar semua command
+// ─────────────────────────────────────────────────
+bot.onText(/\/list/, withAuth(async (msg, match, chatId) => {
+  const message = `
+📋 *DAFTAR COMMAND VPS BOT*
+
+📊 *Monitoring*
+/cpu — Penggunaan CPU
+/ram — Penggunaan RAM
+/disk — Storage disk
+/uptime — Uptime server
+/status — Semua status sekaligus
+
+🔧 *Service Control*
+/restart\_nginx — Restart Nginx
+/restart\_mysql — Restart MySQL
+/restart\_pm2 — Restart PM2
+
+🐳 *Docker*
+/docker\_ps — List containers
+/docker\_restart \<name\> — Restart container
+/docker\_logs \<name\> — Log container
+
+🚀 *Automation*
+/deploy — Deploy aplikasi (git pull → install → restart)
+
+📄 *Logs*
+/log\_nginx — Error log Nginx
+/log\_pm2 — Log PM2
+/log\_access — Access log Nginx
+
+🔔 *Monitoring Alert*
+/monitor\_start — Aktifkan auto alert
+/monitor\_stop — Nonaktifkan auto alert
+/monitor\_status — Status monitoring
+/check\_now — Cek alert sekarang
+
+ℹ️ *Info*
+/list — Tampilkan daftar ini
+/start — Pesan sambutan
+  `.trim();
+
+  await bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
+}));
+
+// ─────────────────────────────────────────────────
 // COMMAND: /status - Ringkasan semua sekaligus
 // ─────────────────────────────────────────────────
 bot.onText(/\/status/, withAuth(async (msg, match, chatId) => {
@@ -237,7 +283,7 @@ bot.on("message", (msg) => {
   const text = msg.text;
 
   // Hanya respon jika dimulai dengan "/" tapi bukan command yang dikenali
-  if (text && text.startsWith("/") && !text.match(/^\/(start|status|cpu|ram|disk|uptime|restart_nginx|restart_mysql|restart_pm2|docker_ps|docker_restart|docker_logs|deploy|log_nginx|log_pm2|log_access|monitor_start|monitor_stop|monitor_status|check_now)/)) {
+  if (text && text.startsWith("/") && !text.match(/^\/(start|list|status|cpu|ram|disk|uptime|restart_nginx|restart_mysql|restart_pm2|docker_ps|docker_restart|docker_logs|deploy|log_nginx|log_pm2|log_access|monitor_start|monitor_stop|monitor_status|check_now)/)) {
     if (!isAllowed(msg.from.id)) return;
     bot.sendMessage(
       chatId,
