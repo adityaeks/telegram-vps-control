@@ -88,7 +88,18 @@ async function runDeploy(bot, chatId, projectPath, mode = "simple") {
 
     // Step 1: Git Pull
     await bot.sendMessage(chatId, "📥 Step 1: Git Pull...");
-    const gitOutput = await execCommand(`cd "${projectPath}" && git pull`);
+    let gitOutput;
+    try {
+      gitOutput = await execCommand(`cd "${projectPath}" && git pull`);
+    } catch (err) {
+      if (err.message.toLowerCase().includes("permission denied") || err.message.toLowerCase().includes("dubious ownership")) {
+        await bot.sendMessage(chatId, "⚠️ Terdeteksi masalah permission, mencoba dengan sudo...");
+        await execCommand(`sudo git config --global --add safe.directory "${projectPath}"`).catch(() => {});
+        gitOutput = await execCommand(`cd "${projectPath}" && sudo git pull`);
+      } else {
+        throw err;
+      }
+    }
     await bot.sendMessage(
       chatId,
       `✅ Git Pull selesai:\n\`\`\`\n${gitOutput.slice(0, 500)}\n\`\`\``,
@@ -98,7 +109,17 @@ async function runDeploy(bot, chatId, projectPath, mode = "simple") {
     // Step 2: Install dependencies (opsional berdasarkan mode)
     if (mode === "npm") {
       await bot.sendMessage(chatId, "📦 Step 2: npm install...");
-      const npmOutput = await execCommand(`cd "${projectPath}" && npm install --production 2>&1`);
+      let npmOutput;
+      try {
+        npmOutput = await execCommand(`cd "${projectPath}" && npm install --production 2>&1`);
+      } catch (err) {
+        if (err.message.toLowerCase().includes("eacces") || err.message.toLowerCase().includes("permission denied")) {
+          await bot.sendMessage(chatId, "⚠️ Terdeteksi masalah permission, mencoba dengan sudo...");
+          npmOutput = await execCommand(`cd "${projectPath}" && sudo npm install --production 2>&1`);
+        } else {
+          throw err;
+        }
+      }
       await bot.sendMessage(
         chatId,
         `✅ npm install selesai:\n\`\`\`\n${npmOutput.slice(0, 400)}\n\`\`\``,
@@ -106,9 +127,21 @@ async function runDeploy(bot, chatId, projectPath, mode = "simple") {
       );
     } else if (mode === "composer") {
       await bot.sendMessage(chatId, "🎼 Step 2: composer install...");
-      const composerOutput = await execCommand(
-        `cd "${projectPath}" && composer install --no-dev --optimize-autoloader 2>&1`
-      );
+      let composerOutput;
+      try {
+        composerOutput = await execCommand(
+          `cd "${projectPath}" && composer install --no-dev --optimize-autoloader 2>&1`
+        );
+      } catch (err) {
+        if (err.message.toLowerCase().includes("permission denied") || err.message.toLowerCase().includes("eacces")) {
+          await bot.sendMessage(chatId, "⚠️ Terdeteksi masalah permission, mencoba dengan sudo...");
+          composerOutput = await execCommand(
+            `cd "${projectPath}" && sudo composer install --no-dev --optimize-autoloader 2>&1`
+          );
+        } else {
+          throw err;
+        }
+      }
       await bot.sendMessage(
         chatId,
         `✅ Composer selesai:\n\`\`\`\n${composerOutput.slice(0, 400)}\n\`\`\``,
